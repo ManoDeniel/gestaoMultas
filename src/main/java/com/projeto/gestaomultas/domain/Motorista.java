@@ -3,7 +3,10 @@ package com.projeto.gestaomultas.domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @lombok.Getter
@@ -14,10 +17,17 @@ import javax.persistence.Table;
 @lombok.EqualsAndHashCode(of = {"motoristaId"})
 @Entity
 @Table(name = "MOTORISTA")
-public class Motorista implements Serializable {
+public class Motorista implements Domain, Serializable {
 
   private static final long serialVersionUID = -3720446385799226119L;
 
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = "SEQ_MOTORISTA")
+  @SequenceGenerator(
+      name = "SEQ_MOTORISTA", 
+      sequenceName = "SEQ_MOTORISTA",
+      allocationSize = 1)
   @Id
   @Column(name = "MOTORISTA_ID", length = 8)
   private Long motoristaId;

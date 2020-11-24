@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @lombok.EqualsAndHashCode(of = {"enderecoId"})
 @Entity
 @Table(name = "ENDERECO")
-public class Endereco implements Serializable {
+public class Endereco implements Domain, Serializable {
 
   private static final long serialVersionUID = 2032636495971516732L;
 

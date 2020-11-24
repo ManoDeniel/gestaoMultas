@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @lombok.Getter
@@ -16,10 +19,17 @@ import javax.persistence.Table;
 @lombok.EqualsAndHashCode(of = {"multaId"})
 @Entity
 @Table(name = "MULTA")
-public class Multa implements Serializable {
+public class Multa implements Domain, Serializable {
 
   private static final long serialVersionUID = 8366733246771203194L;
 
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = "SEQ_MULTA")
+  @SequenceGenerator(
+      name = "SEQ_MULTA", 
+      sequenceName = "SEQ_MULTA",
+      allocationSize = 1)
   @Id
   @Column(name = "MULTA_ID", length = 8)
   private Long multaId;

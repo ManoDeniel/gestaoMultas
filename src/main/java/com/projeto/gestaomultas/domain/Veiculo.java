@@ -3,7 +3,10 @@ package com.projeto.gestaomultas.domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @lombok.Getter
@@ -18,6 +21,13 @@ public class Veiculo implements Serializable {
 
   private static final long serialVersionUID = -6831729678352353721L;
 
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = "SEQ_VEICULO")
+  @SequenceGenerator(
+      name = "SEQ_VEICULO", 
+      sequenceName = "SEQ_VEICULO",
+      allocationSize = 1)
   @Id
   @Column(name = "VEICULO_ID", length = 8, nullable = false, updatable = false)
   private Long veiculoId;

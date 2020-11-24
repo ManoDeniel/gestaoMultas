@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projeto.gestaomultas.domain.Motorista;
-import com.projeto.gestaomultas.domain.MotoristaRepository;
+import com.projeto.gestaomultas.repository.MotoristaRepository;
 
 @Service
 public class MotoristaService {
