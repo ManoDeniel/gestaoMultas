@@ -4,5 +4,7 @@ import com.projeto.gestaomultas.domain.Domain;
 
 public interface Strategy {
 
-  public void processar(final Domain domain);
+  public String processar(final Domain domain);
+
+  public Boolean verificarInstancia(final Domain domain);
 }

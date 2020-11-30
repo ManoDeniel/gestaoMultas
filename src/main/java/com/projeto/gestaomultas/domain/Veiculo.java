@@ -14,10 +14,10 @@ import javax.persistence.Table;
 @lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @lombok.Builder
-@lombok.EqualsAndHashCode(of = {"veiculoId"})
+@lombok.EqualsAndHashCode(of = {"veiculoId"}, callSuper=false)
 @Entity
 @Table(name = "VEICULO")
-public class Veiculo implements Serializable {
+public class Veiculo extends Domain implements Serializable {
 
   private static final long serialVersionUID = -6831729678352353721L;
 

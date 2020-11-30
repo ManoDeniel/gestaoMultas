@@ -1,5 +1,5 @@
 package com.projeto.gestaomultas.domain;
 
-public interface Domain {
+public class Domain {
 
 }
