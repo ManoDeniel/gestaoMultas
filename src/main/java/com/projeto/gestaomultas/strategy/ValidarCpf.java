@@ -12,12 +12,13 @@ public class ValidarCpf implements Strategy {
 
   @Autowired private MotoristaDAO motoristaDAO;
 
+  @Override
   public String processar(final Domain domain) {
-    if (!verificarInstancia(domain)) {
+    if (verificarInstancia(domain)) {
       final Motorista motorista = (Motorista) domain;
       return verificarCpf(motorista);
     }
-    return "Não foi possível buscar um motorista por CPF, pois a entidade não é motorista!";
+    return "Erro interno do sistema!";
   }
 
   @Override
@@ -27,10 +28,10 @@ public class ValidarCpf implements Strategy {
 
   private String verificarCpf(final Motorista motorista) {
     final Optional<Motorista> motoristaCpf = motoristaDAO.findMotoristaByCpf(motorista);
-    if (motoristaCpf == null) {
+    if (motoristaCpf.isEmpty()) {
       return validarNumerosCpf(getNumeros(motorista.getCpf()));
     }
-    return "CPF indisponível!";
+    return "O CPF digitado está indisponível!";
   }
 
   private String getNumeros(final String cpf) {
@@ -39,33 +40,35 @@ public class ValidarCpf implements Strategy {
 
   private String validarNumerosCpf(final String numerosCpf) {
     if (!verificarEmPadroes(numerosCpf)) {
-      if (!validarPrimeiroDigito(numerosCpf)) {
-        if (!validarSegundoDigito(numerosCpf)) {
-          return "";
+      if (validarPrimeiroDigito(numerosCpf)) {
+        if (validarSegundoDigito(numerosCpf)) {
+          return null;
         }
       }
     }
-    return "CPF inválido";
+    return "CPF inválido!";
   }
-
-  private Boolean validarSegundoDigito(final String numerosCpf) {
-    int soma = 0, resultado, digito;
-    for(int peso = 11; peso > 0; peso--) {
-        digito = (int)(numerosCpf.charAt(peso) - 48);
-        soma = soma + (digito * peso);
-    }
-    resultado = 11 - (soma % 11);
-    return obterDigitoVerificador(resultado) == numerosCpf.charAt(10);
-  }
-
+  
   private Boolean validarPrimeiroDigito(final String numerosCpf) {
-    int soma = 0, resultado, digito;
-    for (int peso = 10; peso > 0; peso--) {
-        digito = (int)(numerosCpf.charAt(peso) - 48);
-        soma = soma + (digito * peso);
+    int soma = 0, resultado, digito, peso = 10;
+    for (int posicaoDigito = 0; posicaoDigito < 9; posicaoDigito++) {
+      digito = (int)(numerosCpf.charAt(posicaoDigito) - 48);
+      soma = soma + (digito * peso);
+      peso--;
     }
     resultado = 11 - (soma % 11);
     return obterDigitoVerificador(resultado) == numerosCpf.charAt(9);
+  }
+
+  private Boolean validarSegundoDigito(final String numerosCpf) {
+    int soma = 0, resultado, digito, peso = 11;
+    for (int posicaoDigito = 0; posicaoDigito < 10; posicaoDigito++) {
+      digito = (int)(numerosCpf.charAt(posicaoDigito) - 48);
+      soma = soma + (digito * peso);
+      peso--;
+    }
+    resultado = 11 - (soma % 11);
+    return obterDigitoVerificador(resultado) == numerosCpf.charAt(10);
   }
 
   private char obterDigitoVerificador(int resultado) {

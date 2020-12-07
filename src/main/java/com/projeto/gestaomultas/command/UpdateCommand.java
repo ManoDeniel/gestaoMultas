@@ -11,7 +11,7 @@ public class UpdateCommand implements Command {
   @Autowired private Fachada fachada;
 
   @Override
-  public Domain executar(final Domain domain) {
+  public String executar(final Domain domain) {
     return fachada.update(domain);
   }
 

@@ -49,4 +49,5 @@ public class Veiculo extends Domain implements Serializable {
 
   @Column(name = "NUMERO_RENAVAM")
   private String numeroRenavam;
+
 }

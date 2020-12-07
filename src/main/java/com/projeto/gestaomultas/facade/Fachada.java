@@ -32,12 +32,6 @@ public class Fachada {
 
   protected Map<String, List<Strategy>> allStrategy;
 
-  @Autowired
-  public Fachada() {
-    allDao = loadDao();
-    allStrategy = loadStrategy();
-  }
-
   public Map<String, DAO> loadDao() {
     final Map<String, DAO> daos = new HashMap<>();
     daos.put(Motorista.class.getName(), motoristaDAO);
@@ -54,24 +48,39 @@ public class Fachada {
     return strategys;
   }
 
-  public Domain delete(final Domain domain) {
-    final DAO dao = allDao.get(domain.getClass().getName());
-    return dao.save(domain);
+  private void configMaps() {
+    allDao = loadDao();
+    allStrategy = loadStrategy();
   }
 
-  public List<Domain> find(final Domain domain) {
+  public String delete(final Domain domain) {
+    configMaps();
     final DAO dao = allDao.get(domain.getClass().getName());
-    return dao.findAll();
+    return dao.delete(domain);
   }
 
-  public Domain save(final Domain domain) {
+  public List<? extends Domain> find(final Domain domain) {
+    configMaps();
+    final DAO dao = allDao.get(domain.getClass().getName());
+    return dao.find(domain);
+  }
+
+  public String save(final Domain domain) {
+    configMaps();
+    String logErro = null;
     final List<Strategy> strategys = allStrategy.get(domain.getClass().getName());
-    strategys.stream().map(strategy -> strategy.processar(domain));
-    final DAO dao = allDao.get(domain.getClass().getName());
-    return dao.save(domain);
+    for (final Strategy strategy : strategys) {
+      logErro = strategy.processar(domain);
+    }
+    if (logErro == null) {
+        final DAO dao = allDao.get(domain.getClass().getName());
+        return dao.save(domain);
+    }
+    return logErro;
   }
 
-  public Domain update(final Domain domain) {
+  public String update(final Domain domain) {
+    configMaps();
     final DAO dao = allDao.get(domain.getClass().getName());
     return dao.update(domain);
   }

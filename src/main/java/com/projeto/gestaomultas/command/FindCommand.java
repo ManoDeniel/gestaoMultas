@@ -12,7 +12,7 @@ public class FindCommand implements Command {
   @Autowired private Fachada fachada;
 
   @Override
-  public List<Domain> executar(final Domain domain) {
+  public List<? extends Domain> executar(final Domain domain) {
     return fachada.find(domain);
   }
 

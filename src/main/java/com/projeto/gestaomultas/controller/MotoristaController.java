@@ -17,6 +17,7 @@ import com.projeto.gestaomultas.command.DeleteCommand;
 import com.projeto.gestaomultas.command.FindCommand;
 import com.projeto.gestaomultas.command.SaveCommand;
 import com.projeto.gestaomultas.command.UpdateCommand;
+import com.projeto.gestaomultas.domain.Domain;
 import com.projeto.gestaomultas.domain.Motorista;
 import com.projeto.gestaomultas.domain.dto.MotoristaDTO;
 import io.swagger.annotations.Api;
@@ -44,40 +45,50 @@ public class MotoristaController {
   @ApiOperation(
       value = "Retorna uma lista de todos os motoristas cadastrados",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<MotoristaDTO> find(@RequestBody final MotoristaDTO motoristaDTO) {
-    final Motorista motoristaInput = modelMapper.map(motoristaDTO, Motorista.class);
+  public List<MotoristaDTO> findAll() {
+    final Motorista motoristaInput = new Motorista();
     return findCommand.executar(motoristaInput)
         .stream().map(motorista -> modelMapper.map(motorista, MotoristaDTO.class))
         .collect(Collectors.toList());
   }
 
+  @GetMapping("/motoristas/{motoristaId}")
+  @ApiOperation(
+      value = "Retorna um motorista por id",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public MotoristaDTO findById(@PathVariable(name = "motoristaId") final Long motoristaId) {
+    final Motorista motoristaInput = Motorista.builder().motoristaId(motoristaId).build();
+    final List<? extends Domain> executar = findCommand.executar(motoristaInput);
+    return modelMapper.map(executar.get(0), MotoristaDTO.class);
+  }
+
   @PostMapping("/motoristas")
   @ApiOperation(
       value = "Realiza a persistencia de um motorista",
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  public MotoristaDTO save(@RequestBody final MotoristaDTO motoristaDTO) {
+          produces = MediaType.APPLICATION_JSON_VALUE)
+  public String save(@RequestBody final MotoristaDTO motoristaDTO) {
     final Motorista motoristaInput = modelMapper.map(motoristaDTO, Motorista.class);
-    final Motorista motoristaOutput = (Motorista) saveCommand.executar(motoristaInput);
-    return modelMapper.map(motoristaOutput, MotoristaDTO.class);
+    return saveCommand.executar(motoristaInput);
   }
 
-  @PutMapping("/motoristas/motoristaId")
+  @PutMapping("/motoristas/{motoristaId}")
   @ApiOperation(
       value = "Atualiza as informações de um motorista atráves de um id",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public MotoristaDTO update(@RequestBody final MotoristaDTO motoristaDTO) {
+  public String update(
+      @RequestBody final MotoristaDTO motoristaDTO,
+      @PathVariable(name = "motoristaId") final Long motoristaId) {
     final Motorista motoristaInput = modelMapper.map(motoristaDTO, Motorista.class);
-    final Motorista motoristaOutput = (Motorista) updateCommand.executar(motoristaInput);
-    return modelMapper.map(motoristaOutput, MotoristaDTO.class);
-    
+    motoristaInput.setMotoristaId(motoristaId);
+    return updateCommand.executar(motoristaInput);
   }
 
-  @DeleteMapping("/motoristas/motoristaId")
+  @DeleteMapping("/motoristas/{motoristaId}")
   @ApiOperation(
       value = "Faz a exclusão de um motorista por id",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Motorista delete(@PathVariable(name = "motoristaId") final Long motoristaId) {
+  public String delete(@PathVariable(name = "motoristaId") final Long motoristaId) {
     final Motorista motorista = Motorista.builder().motoristaId(motoristaId).build();
-    return (Motorista) deleteCommand.executar(motorista);
+    return deleteCommand.executar(motorista);
   }
 }

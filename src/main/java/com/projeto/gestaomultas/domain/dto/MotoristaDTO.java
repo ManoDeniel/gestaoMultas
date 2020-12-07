@@ -20,4 +20,8 @@ public class MotoristaDTO implements Serializable {
 
   private String numeroCNH;
 
+  private EnderecoDTO endereco;
+
+  private TelefoneDTO telefone;
+  
 }

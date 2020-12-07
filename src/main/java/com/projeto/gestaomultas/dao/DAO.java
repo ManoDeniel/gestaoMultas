@@ -7,11 +7,14 @@ public interface DAO {
 
   public String delete(final Domain domain);
 
-  @SuppressWarnings("rawtypes")
-  public List findAll();
+  public List<? extends Domain> find(final Domain domain);
 
-  public Domain save(final Domain domain);
+  public List<? extends Domain> findAll();
 
-  public Domain update(final Domain domain);
+  public List<? extends Domain> findById(final Long id);
+
+  public String save(final Domain domain);
+
+  public String update(final Domain domain);
 
 }
