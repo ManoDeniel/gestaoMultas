@@ -14,6 +14,5 @@ public class TelefoneDTO implements Serializable {
 
   private String numero;
 
-  private String tipoTelefone; // enum
-
+  private String tipoTelefone;
 }

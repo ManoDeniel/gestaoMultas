@@ -11,10 +11,11 @@ public interface DAO {
 
   public List<? extends Domain> findAll();
 
-  public List<? extends Domain> findById(final Long id);
+  public Domain findById(final Long id);
 
   public String save(final Domain domain);
 
   public String update(final Domain domain);
 
+  public String registrarLog(final String registro);
 }

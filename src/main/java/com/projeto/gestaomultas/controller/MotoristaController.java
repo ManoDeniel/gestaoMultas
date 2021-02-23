@@ -40,6 +40,16 @@ public class MotoristaController {
   @Autowired private SaveCommand saveCommand;
 
   @Autowired private UpdateCommand updateCommand;
+  
+  @GetMapping("/motoristas/{motoristaId}")
+  @ApiOperation(
+      value = "Retorna um motorista por id",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public MotoristaDTO findById(@PathVariable(name = "motoristaId") final Long motoristaId) {
+    final Motorista motoristaInput = Motorista.builder().motoristaId(motoristaId).build();
+    final List<? extends Domain> executar = findCommand.executar(motoristaInput);
+    return modelMapper.map(executar.get(0), MotoristaDTO.class);
+  }
 
   @GetMapping("/motoristas")
   @ApiOperation(
@@ -50,16 +60,6 @@ public class MotoristaController {
     return findCommand.executar(motoristaInput)
         .stream().map(motorista -> modelMapper.map(motorista, MotoristaDTO.class))
         .collect(Collectors.toList());
-  }
-
-  @GetMapping("/motoristas/{motoristaId}")
-  @ApiOperation(
-      value = "Retorna um motorista por id",
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  public MotoristaDTO findById(@PathVariable(name = "motoristaId") final Long motoristaId) {
-    final Motorista motoristaInput = Motorista.builder().motoristaId(motoristaId).build();
-    final List<? extends Domain> executar = findCommand.executar(motoristaInput);
-    return modelMapper.map(executar.get(0), MotoristaDTO.class);
   }
 
   @PostMapping("/motoristas")

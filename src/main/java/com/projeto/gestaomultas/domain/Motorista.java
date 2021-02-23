@@ -1,6 +1,7 @@
 package com.projeto.gestaomultas.domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @lombok.Getter
 @lombok.Setter
@@ -34,7 +36,7 @@ public class Motorista extends Domain implements Serializable {
       sequenceName = "SEQ_MOTORISTA",
       allocationSize = 1)
   @Id
-  @Column(name = "MOTORISTA_ID", length = 8)
+  @Column(name = "ID", length = 8)
   private Long motoristaId;
 
   @Column(name = "CPF", length = 14)
@@ -49,19 +51,21 @@ public class Motorista extends Domain implements Serializable {
   @Column(name = "NUMERO_CNH", length = 11)
   private String numeroCNH;
 
-  @OneToMany
-  @JoinColumn(name = "MULTA_ID")
-  private List<Multa> multas;
+  @CreationTimestamp
+  @Column(name = "DATA_CADASTRO")
+  private LocalDate dataCadastro;
 
-  @OneToMany
-  @JoinColumn(name = "VEICULO_ID")
-  private List<Veiculo> veiculos;
-  
-  @OneToOne(cascade = {CascadeType.ALL})
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "ENDERECO_ID")
   private Endereco endereco;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "TELEFONE_ID")
   private Telefone telefone;
+
+  @OneToMany(mappedBy = "motorista")
+  private List<Multa> multas;
+
+  @OneToMany(mappedBy = "motorista")
+  private List<Veiculo> veiculos;
 }

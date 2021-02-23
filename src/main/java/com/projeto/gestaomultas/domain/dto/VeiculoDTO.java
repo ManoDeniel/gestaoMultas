@@ -25,4 +25,5 @@ public class VeiculoDTO implements Serializable {
 
   private String numeroRenavam;
 
+  private Long motoristaId;
 }

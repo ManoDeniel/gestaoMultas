@@ -8,8 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @lombok.Getter
 @lombok.Setter
@@ -31,20 +34,20 @@ public class Multa extends Domain implements Serializable {
       sequenceName = "SEQ_MULTA",
       allocationSize = 1)
   @Id
-  @Column(name = "MULTA_ID", length = 8)
+  @Column(name = "ID", length = 8)
   private Long multaId;
 
   @Column(name = "NUMERO_INFRACAO", length = 4)
   private String numeroInfracao;
 
   @Column(name = "TIPO_INFRACAO", length = 30)
-  private String tipoInfracao; // enum
+  private String tipoInfracao;
 
   @Column(name = "DESCRICAO_INFRACAO", length = 200)
   private String descricaoInfracao;
 
   @Column(name = "ORGAO_AUTUADOR", length = 50)
-  private String orgaoAutuador; // enum
+  private String orgaoAutuador;
 
   @Column(name = "VALOR")
   private BigDecimal valor;
@@ -58,4 +61,21 @@ public class Multa extends Domain implements Serializable {
   @Column(name = "DATA_VENCIMENTO")
   private LocalDate dataVencimento;
 
+  @CreationTimestamp
+  @Column(name = "DATA_CADASTRO")
+  private LocalDate dataCadastro;
+
+  @Column(name = "MOTORISTA_ID", insertable = false, updatable = false)
+  private Long motoristaId;
+
+  @Column(name = "VEICULO_ID", insertable = false, updatable = false)
+  private Long veiculoId;
+
+  @ManyToOne
+  @JoinColumn(name = "MOTORISTA_ID", referencedColumnName = "ID")
+  private Motorista motorista;
+
+  @ManyToOne
+  @JoinColumn(name = "VEICULO_ID", referencedColumnName = "ID")
+  private Veiculo veiculo;
 }

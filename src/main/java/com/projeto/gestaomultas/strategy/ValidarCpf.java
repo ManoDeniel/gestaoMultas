@@ -8,7 +8,7 @@ import com.projeto.gestaomultas.domain.Domain;
 import com.projeto.gestaomultas.domain.Motorista;
 
 @Component
-public class ValidarCpf implements Strategy {
+public class ValidarCPF implements Strategy {
 
   @Autowired private MotoristaDAO motoristaDAO;
 
@@ -27,7 +27,7 @@ public class ValidarCpf implements Strategy {
   }
 
   private String verificarCpf(final Motorista motorista) {
-    final Optional<Motorista> motoristaCpf = motoristaDAO.findMotoristaByCpf(motorista);
+    final Optional<Motorista> motoristaCpf = motoristaDAO.findMotoristaByCpf(motorista.getCpf());
     if (motoristaCpf.isEmpty()) {
       return validarNumerosCpf(getNumeros(motorista.getCpf()));
     }

@@ -1,13 +1,19 @@
 package com.projeto.gestaomultas.domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @lombok.Getter
 @lombok.Setter
@@ -29,7 +35,7 @@ public class Veiculo extends Domain implements Serializable {
       sequenceName = "SEQ_VEICULO",
       allocationSize = 1)
   @Id
-  @Column(name = "VEICULO_ID", length = 8, nullable = false, updatable = false)
+  @Column(name = "ID", length = 8, nullable = false, updatable = false)
   private Long veiculoId;
 
   @Column(name = "MARCA")
@@ -50,4 +56,17 @@ public class Veiculo extends Domain implements Serializable {
   @Column(name = "NUMERO_RENAVAM")
   private String numeroRenavam;
 
+  @CreationTimestamp
+  @Column(name = "DATA_CADASTRO")
+  private LocalDate dataCadastro;
+
+  @Column(name = "MOTORISTA_ID", insertable = false, updatable = false)
+  private Long motoristaId;
+
+  @ManyToOne
+  @JoinColumn(name = "MOTORISTA_ID", referencedColumnName = "ID")
+  private Motorista motorista;
+
+  @OneToMany(mappedBy = "veiculo")
+  private List<Multa> multas;
 }

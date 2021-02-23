@@ -16,7 +16,7 @@ public class EnderecoDTO implements Serializable {
 
   private String numero;
 
-  private String tipoLogradouro; // enum
+  private String tipoLogradouro;
 
   private String bairro;
 
@@ -25,5 +25,4 @@ public class EnderecoDTO implements Serializable {
   private String estado;
 
   private String cep;
-
 }

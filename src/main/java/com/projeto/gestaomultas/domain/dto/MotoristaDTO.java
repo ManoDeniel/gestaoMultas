@@ -1,6 +1,7 @@
 package com.projeto.gestaomultas.domain.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 @lombok.Getter
 @lombok.Setter
@@ -23,5 +24,8 @@ public class MotoristaDTO implements Serializable {
   private EnderecoDTO endereco;
 
   private TelefoneDTO telefone;
-  
+
+  private List<MultaDTO> multas;
+
+  private List<VeiculoDTO> veiculos;
 }

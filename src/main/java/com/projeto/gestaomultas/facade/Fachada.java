@@ -15,7 +15,11 @@ import com.projeto.gestaomultas.domain.Motorista;
 import com.projeto.gestaomultas.domain.Multa;
 import com.projeto.gestaomultas.domain.Veiculo;
 import com.projeto.gestaomultas.strategy.Strategy;
-import com.projeto.gestaomultas.strategy.ValidarCpf;
+import com.projeto.gestaomultas.strategy.ValidarCNH;
+import com.projeto.gestaomultas.strategy.ValidarCPF;
+import com.projeto.gestaomultas.strategy.ValidarNumeroInfracao;
+import com.projeto.gestaomultas.strategy.ValidarNumeroRenavam;
+import com.projeto.gestaomultas.strategy.ValidarPlacaVeiculo;
 
 @Component
 public class Fachada {
@@ -26,7 +30,15 @@ public class Fachada {
 
   @Autowired private VeiculoDAO veiculoDAO;
 
-  @Autowired private ValidarCpf validarcpf;
+  @Autowired private ValidarCPF validarCPF;
+
+  @Autowired private ValidarCNH validarCNH;
+
+  @Autowired private ValidarNumeroInfracao validarNumeroInfracao;
+
+  @Autowired private ValidarPlacaVeiculo validarPlacaVeiculo;
+
+  @Autowired private ValidarNumeroRenavam validarNumeroRenavam;
 
   protected Map<String, DAO> allDao;
 
@@ -42,9 +54,21 @@ public class Fachada {
 
   public Map<String, List<Strategy>> loadStrategy() {
     final Map<String, List<Strategy>> strategys = new HashMap<>();
-    final List<Strategy> motoristaStrategy = new ArrayList<>();
-    motoristaStrategy.add(validarcpf);
-    strategys.put(Motorista.class.getName(), motoristaStrategy);
+
+    final List<Strategy> veiculoStrategys = new ArrayList<>();
+    veiculoStrategys.add(validarPlacaVeiculo);
+    veiculoStrategys.add(validarNumeroRenavam);
+
+    final List<Strategy> multaStrategys = new ArrayList<>();
+    multaStrategys.add(validarNumeroInfracao);
+
+    final List<Strategy> motoristaStrategys = new ArrayList<>();
+    motoristaStrategys.add(validarCPF);
+    motoristaStrategys.add(validarCNH);
+
+    strategys.put(Veiculo.class.getName(), veiculoStrategys);
+    strategys.put(Multa.class.getName(), multaStrategys);
+    strategys.put(Motorista.class.getName(), motoristaStrategys);
     return strategys;
   }
 
@@ -69,14 +93,16 @@ public class Fachada {
     configMaps();
     String logErro = null;
     final List<Strategy> strategys = allStrategy.get(domain.getClass().getName());
-    for (final Strategy strategy : strategys) {
-      logErro = strategy.processar(domain);
+    if (strategys != null) {
+      for (final Strategy strategy : strategys) {
+        logErro = strategy.processar(domain);
+        if (logErro != null) {
+          return logErro;
+        }
+      }
     }
-    if (logErro == null) {
-        final DAO dao = allDao.get(domain.getClass().getName());
-        return dao.save(domain);
-    }
-    return logErro;
+    final DAO dao = allDao.get(domain.getClass().getName());
+    return dao.save(domain);
   }
 
   public String update(final Domain domain) {

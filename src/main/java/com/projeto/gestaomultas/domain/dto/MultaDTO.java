@@ -16,11 +16,11 @@ public class MultaDTO implements Serializable {
 
   private String numeroInfracao;
 
-  private String tipoInfracao; // enum
+  private String tipoInfracao;
 
   private String descricaoInfracao;
 
-  private String orgaoAutuador; // enum
+  private String orgaoAutuador;
 
   private BigDecimal valor;
 
@@ -29,5 +29,9 @@ public class MultaDTO implements Serializable {
   private LocalDate dataEmissao;
 
   private LocalDate dataVencimento;
+
+  private Long motoristaId;
+
+  private Long veiculoId;
 
 }

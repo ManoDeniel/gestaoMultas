@@ -1,6 +1,7 @@
 package com.projeto.gestaomultas.domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @lombok.Getter
 @lombok.Setter
@@ -29,16 +31,16 @@ public class Telefone extends Domain implements Serializable {
       sequenceName = "SEQ_TELEFONE",
       allocationSize = 1)
   @Id
-  @Column(name = "TELEFONE_ID", length = 8)
+  @Column(name = "ID", length = 8)
   private Long telefoneId;
-
-  @Column(name = "MOTORISTA_ID", length = 8)
-  private Long motoristaId;
 
   @Column(name = "NUMERO", length = 15)
   private String numero;
 
   @Column(name = "TIPO_TELEFONE", length = 20)
-  private String tipoTelefone; // enum
+  private String tipoTelefone;
 
+  @CreationTimestamp
+  @Column(name = "DATA_CADASTRO")
+  private LocalDate dataCadastro;
 }
